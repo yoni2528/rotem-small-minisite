@@ -11,6 +11,13 @@ interface FormData {
   hasBiometric: boolean;
 }
 
+interface UploadedUrls {
+  idFront: string | null;
+  idBack: string | null;
+}
+
+const WEBHOOK_URL = "https://hook.eu2.make.com/dct8sy7t79jezgcql81wapvraruil3wq";
+
 export default function Home() {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
@@ -21,9 +28,16 @@ export default function Home() {
     hasBiometric: false,
   });
 
+  const [uploadedUrls, setUploadedUrls] = useState<UploadedUrls>({
+    idFront: null,
+    idBack: null,
+  });
+
   const [showEmailField, setShowEmailField] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [uploadingFront, setUploadingFront] = useState(false);
+  const [uploadingBack, setUploadingBack] = useState(false);
 
   const idFrontRef = useRef<HTMLInputElement>(null);
   const idBackRef = useRef<HTMLInputElement>(null);
@@ -33,20 +47,86 @@ export default function Home() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (
+  const uploadFile = async (file: File, type: "front" | "back"): Promise<string | null> => {
+    const formDataObj = new FormData();
+    formDataObj.append("file", file);
+    formDataObj.append("type", type);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataObj,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      return data.url;
+    } catch (error) {
+      console.error("Upload error:", error);
+      return null;
+    }
+  };
+
+  const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
     field: "idFront" | "idBack"
   ) => {
     const file = e.target.files?.[0] || null;
+    if (!file) return;
+
     setFormData((prev) => ({ ...prev, [field]: file }));
+
+    // Upload to Vercel Blob
+    const type = field === "idFront" ? "front" : "back";
+    if (field === "idFront") {
+      setUploadingFront(true);
+    } else {
+      setUploadingBack(true);
+    }
+
+    const url = await uploadFile(file, type);
+
+    if (url) {
+      setUploadedUrls((prev) => ({ ...prev, [field]: url }));
+    }
+
+    if (field === "idFront") {
+      setUploadingFront(false);
+    } else {
+      setUploadingBack(false);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const leadData = {
+      fullName: formData.fullName,
+      phone: formData.phone,
+      email: formData.email || null,
+      idFrontUrl: uploadedUrls.idFront,
+      idBackUrl: uploadedUrls.idBack,
+      hasBiometric: formData.hasBiometric,
+      submittedAt: new Date().toISOString(),
+    };
+
+    try {
+      // Send to Make.com webhook
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(leadData),
+      });
+    } catch (error) {
+      console.error("Webhook error:", error);
+      // Continue anyway - don't block the user
+    }
 
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -56,7 +136,9 @@ export default function Home() {
     return (
       formData.fullName.trim() !== "" &&
       formData.phone.trim() !== "" &&
-      formData.idFront !== null
+      uploadedUrls.idFront !== null &&
+      !uploadingFront &&
+      !uploadingBack
     );
   };
 
@@ -94,6 +176,7 @@ export default function Home() {
                 idBack: null,
                 hasBiometric: false,
               });
+              setUploadedUrls({ idFront: null, idBack: null });
               setShowEmailField(false);
             }}
             className="submit-btn"
@@ -222,21 +305,24 @@ export default function Home() {
               className="hidden"
             />
             <div
-              onClick={() => idFrontRef.current?.click()}
-              className={`upload-area ${formData.idFront ? "has-file" : ""}`}
+              onClick={() => !uploadingFront && idFrontRef.current?.click()}
+              className={`upload-area ${uploadedUrls.idFront ? "has-file" : ""} ${uploadingFront ? "opacity-70 cursor-wait" : ""}`}
             >
-              {formData.idFront ? (
+              {uploadingFront ? (
                 <div className="flex items-center justify-center gap-3">
-                  {formData.idFront.type.startsWith("image/") && (
-                    <img
-                      src={URL.createObjectURL(formData.idFront)}
-                      alt="ID Front Preview"
-                      className="image-preview"
-                    />
-                  )}
+                  <div className="spinner-dark" />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">מעלה...</span>
+                </div>
+              ) : uploadedUrls.idFront ? (
+                <div className="flex items-center justify-center gap-3">
+                  <img
+                    src={uploadedUrls.idFront}
+                    alt="ID Front Preview"
+                    className="image-preview"
+                  />
                   <div className="text-right">
                     <p className="font-medium text-emerald-600 dark:text-emerald-400 text-sm">
-                      {formData.idFront.name}
+                      הועלה בהצלחה ✓
                     </p>
                     <p className="text-xs text-gray-500">לחצו להחלפה</p>
                   </div>
@@ -299,21 +385,24 @@ export default function Home() {
                   className="hidden"
                 />
                 <div
-                  onClick={() => idBackRef.current?.click()}
-                  className={`upload-area ${formData.idBack ? "has-file" : ""}`}
+                  onClick={() => !uploadingBack && idBackRef.current?.click()}
+                  className={`upload-area ${uploadedUrls.idBack ? "has-file" : ""} ${uploadingBack ? "opacity-70 cursor-wait" : ""}`}
                 >
-                  {formData.idBack ? (
+                  {uploadingBack ? (
                     <div className="flex items-center justify-center gap-3">
-                      {formData.idBack.type.startsWith("image/") && (
-                        <img
-                          src={URL.createObjectURL(formData.idBack)}
-                          alt="ID Back Preview"
-                          className="image-preview"
-                        />
-                      )}
+                      <div className="spinner-dark" />
+                      <span className="text-sm text-gray-600 dark:text-gray-300">מעלה...</span>
+                    </div>
+                  ) : uploadedUrls.idBack ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <img
+                        src={uploadedUrls.idBack}
+                        alt="ID Back Preview"
+                        className="image-preview"
+                      />
                       <div className="text-right">
                         <p className="font-medium text-emerald-600 dark:text-emerald-400 text-sm">
-                          {formData.idBack.name}
+                          הועלה בהצלחה ✓
                         </p>
                         <p className="text-xs text-gray-500">לחצו להחלפה</p>
                       </div>
