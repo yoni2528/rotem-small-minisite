@@ -33,7 +33,7 @@ export default function Home() {
     idBack: null,
   });
 
-  const [showEmailField, setShowEmailField] = useState(false);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [uploadingFront, setUploadingFront] = useState(false);
@@ -177,7 +177,6 @@ export default function Home() {
                 hasBiometric: false,
               });
               setUploadedUrls({ idFront: null, idBack: null });
-              setShowEmailField(false);
             }}
             className="submit-btn"
           >
@@ -252,44 +251,22 @@ export default function Home() {
             />
           </div>
 
-          {/* Optional Email Toggle */}
+          {/* Email (Optional) */}
           <div>
-            <button
-              type="button"
-              onClick={() => setShowEmailField(!showEmailField)}
-              className="flex items-center gap-2 text-link text-sm"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={`transition-transform duration-200 ${showEmailField ? "rotate-45" : ""}`}
-              >
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-              {showEmailField ? "הסתר שדה מייל" : "הוסף כתובת מייל (אופציונלי)"}
-            </button>
-
-            {showEmailField && (
-              <div className="mt-3 fade-in">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="example@email.com"
-                  className="form-input"
-                  dir="ltr"
-                  style={{ textAlign: "left" }}
-                />
-              </div>
-            )}
+            <label htmlFor="email" className="form-label">
+              כתובת מייל <span className="text-gray-400 text-xs">(אופציונלי)</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="example@email.com"
+              className="form-input"
+              dir="ltr"
+              style={{ textAlign: "left" }}
+            />
           </div>
 
           {/* ID Front Upload */}
