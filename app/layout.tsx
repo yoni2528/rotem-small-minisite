@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "הרשמה לביטוח | טופס פרטים אישיים",
-  description: "מילוי טופס פרטים אישיים להרשמה לביטוח - העלאת תעודת זהות ופרטי קשר",
+  title: "עובדי Magma | הרשמה לפגישת פנסיונית",
+  description: "מילוי טופס פרטים אישיים להרשמה לפגישת פנסיונית - העלאת תעודת זהות ופרטי קשר",
 };
 
 export default function RootLayout({

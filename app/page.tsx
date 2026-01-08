@@ -197,7 +197,7 @@ export default function Home() {
             alt="Brain Group"
             className="h-14 mx-auto mb-4"
           />
-          <h1 className="text-xl font-semibold">הרשמה לביטוח</h1>
+          <h1 className="text-xl font-semibold">עובדי Magma הרשמה לפגישת פנסיונית</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             מלאו את הפרטים הבאים להמשך התהליך
           </p>
