@@ -25,16 +25,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-    --card-bg: #1e293b;
-    --border-color: #334155;
-    --input-bg: #1e293b;
-    --text-muted: #94a3b8;
-  }
-}
+
 
 * {
   box-sizing: border-box;

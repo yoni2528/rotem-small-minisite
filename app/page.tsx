@@ -146,7 +146,7 @@ export default function Home() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="card rounded-xl p-8 max-w-md w-full text-center fade-in">
-          <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+          <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-emerald-100 flex items-center justify-center">
             <svg
               width="28"
               height="28"
@@ -156,13 +156,13 @@ export default function Home() {
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-emerald-600 dark:text-emerald-400"
+              className="text-emerald-600"
             >
               <path d="M20 6L9 17l-5-5" />
             </svg>
           </div>
           <h2 className="text-xl font-semibold mb-2">הטופס נשלח בהצלחה</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-6">
+          <p className="text-gray-500 mb-6">
             תודה על פנייתך. נציג יצור איתך קשר בהקדם.
           </p>
           <button
@@ -198,7 +198,7 @@ export default function Home() {
             className="h-14 mx-auto mb-4"
           />
           <h1 className="text-xl font-semibold">עובדי Magma הרשמה לפגישת פנסיונית</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">
+          <p className="text-gray-500 text-sm">
             מלאו את הפרטים הבאים להמשך התהליך
           </p>
         </div>
@@ -277,7 +277,7 @@ export default function Home() {
               {uploadingFront ? (
                 <div className="flex items-center justify-center gap-3">
                   <div className="spinner-dark" />
-                  <span className="text-sm text-gray-600 dark:text-gray-300">מעלה...</span>
+                  <span className="text-sm text-gray-600">מעלה...</span>
                 </div>
               ) : uploadedUrls.idFront ? (
                 <div className="flex items-center justify-center gap-3">
@@ -287,7 +287,7 @@ export default function Home() {
                     className="image-preview"
                   />
                   <div className="text-right">
-                    <p className="font-medium text-emerald-600 dark:text-emerald-400 text-sm">
+                    <p className="font-medium text-emerald-600 text-sm">
                       הועלה בהצלחה ✓
                     </p>
                     <p className="text-xs text-gray-500">לחצו להחלפה</p>
@@ -306,7 +306,7 @@ export default function Home() {
                   >
                     <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
                   </svg>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <p className="text-sm text-gray-600">
                     לחצו להעלאת צילום ת.ז
                   </p>
                 </>
@@ -334,7 +334,7 @@ export default function Home() {
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
               </div>
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-gray-700">
                 תעודת זהות ביומטרית (עם צד אחורי)
               </span>
             </div>
@@ -357,7 +357,7 @@ export default function Home() {
                   {uploadingBack ? (
                     <div className="flex items-center justify-center gap-3">
                       <div className="spinner-dark" />
-                      <span className="text-sm text-gray-600 dark:text-gray-300">מעלה...</span>
+                      <span className="text-sm text-gray-600">מעלה...</span>
                     </div>
                   ) : uploadedUrls.idBack ? (
                     <div className="flex items-center justify-center gap-3">
@@ -367,7 +367,7 @@ export default function Home() {
                         className="image-preview"
                       />
                       <div className="text-right">
-                        <p className="font-medium text-emerald-600 dark:text-emerald-400 text-sm">
+                        <p className="font-medium text-emerald-600 text-sm">
                           הועלה בהצלחה ✓
                         </p>
                         <p className="text-xs text-gray-500">לחצו להחלפה</p>
@@ -386,7 +386,7 @@ export default function Home() {
                       >
                         <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
                       </svg>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <p className="text-sm text-gray-600">
                         לחצו להעלאת צד אחורי
                       </p>
                     </>
