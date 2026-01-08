@@ -191,24 +191,13 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <main className="card rounded-xl p-6 md:p-8 max-w-md w-full">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-10 h-10 rounded-lg bg-blue-900 flex items-center justify-center">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-            </div>
-            <h1 className="text-xl font-semibold">הרשמה לביטוח</h1>
-          </div>
+        <div className="mb-6 text-center">
+          <img
+            src="/logo.png"
+            alt="Brain Group"
+            className="h-14 mx-auto mb-4"
+          />
+          <h1 className="text-xl font-semibold">הרשמה לביטוח</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
             מלאו את הפרטים הבאים להמשך התהליך
           </p>
